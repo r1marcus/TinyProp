@@ -1,0 +1,384 @@
+# depslib dependency file v1.0
+1636453515 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aialgo\aialgo_sequential_inference.c
+	"basic/base/aialgo/aialgo_sequential_inference.h"
+	"basic/default/aimath/aimath_f32_default.h"
+	<stdio.h>
+	<float.h>
+	<string.h>
+
+1634726505 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aialgo\aialgo_sequential_inference.h
+	"core/aifes_core.h"
+	"core/aifes_math.h"
+	"basic/base/aimath/aimath_basic.h"
+	"basic/default/ailayer/ailayer_dense_default.h"
+
+1638868492 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\core\aifes_core.h
+	"aifes_math.h"
+
+1636457657 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\core\aifes_math.h
+	<stdint.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aimath\aimath_basic.h
+	"core/aifes_math.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_dense_default.h
+	"basic/base/ailayer/ailayer_dense.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1638868492 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_dense.h
+	"core/aifes_core.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1634722204 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\aimath\aimath_f32_default.h
+	<stdint.h>
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	"basic/base/aimath/aimath_f32.h"
+
+1633521701 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aimath\aimath_f32.h
+	"core/aifes_math.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1636457580 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aialgo\aialgo_sequential_training.c
+	"basic/base/aialgo/aialgo_sequential_training.h"
+	"basic/base/aialgo/aialgo_sequential_inference.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aialgo\aialgo_sequential_training.h
+	"core/aifes_core.h"
+	"core/aifes_math.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1638868492 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aialgo\aialgo_sequential_training_meprop.c
+	"basic/base/aialgo/aialgo_sequential_training_meProp.h"
+	"basic/base/aialgo/aialgo_sequential_training.h"
+	"basic/base/aialgo/aialgo_sequential_inference.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1638868492 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aialgo\aialgo_sequential_training_meprop.h
+	"core/aifes_core.h"
+	"core/aifes_math.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1641916020 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_dense.c
+	"basic/base/ailayer/ailayer_dense.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633608519 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_elu.c
+	"basic/base/ailayer/ailayer_elu.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_elu.h
+	"core/aifes_core.h"
+
+1633608549 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_input.c
+	"basic/base/ailayer/ailayer_input.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_input.h
+	"core/aifes_core.h"
+
+1633608567 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_leaky_relu.c
+	"basic/base/ailayer/ailayer_leaky_relu.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_leaky_relu.h
+	"core/aifes_core.h"
+
+1633608596 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_relu.c
+	"basic/base/ailayer/ailayer_relu.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_relu.h
+	"core/aifes_core.h"
+
+1633608611 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_sigmoid.c
+	"basic/base/ailayer/ailayer_sigmoid.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_sigmoid.h
+	"core/aifes_core.h"
+
+1633608630 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_softmax.c
+	"basic/base/ailayer/ailayer_softmax.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_softmax.h
+	"core/aifes_core.h"
+
+1633608642 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_softsign.c
+	"basic/base/ailayer/ailayer_softsign.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_softsign.h
+	"core/aifes_core.h"
+
+1633608654 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_tanh.c
+	"basic/base/ailayer/ailayer_tanh.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_tanh.h
+	"core/aifes_core.h"
+
+1633608708 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_template.c
+	"basic/base/ailayer/ailayer_template.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailayer\ailayer_template.h
+	"core/aifes_core.h"
+
+1636457580 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailoss\ailoss_crossentropy.c
+	"basic/base/ailoss/ailoss_crossentropy.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1634294264 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailoss\ailoss_crossentropy.h
+	"core/aifes_core.h"
+	"basic/base/ailayer/ailayer_softmax.h"
+	"basic/base/ailayer/ailayer_sigmoid.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailoss\ailoss_mse.c
+	"basic/base/ailoss/ailoss_mse.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\ailoss\ailoss_mse.h
+	"core/aifes_core.h"
+
+1634649378 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aimath\aimath_basic.c
+	"basic/base/aimath/aimath_basic.h"
+
+1633516466 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aimath\aimath_f32.c
+	"basic/base/aimath/aimath_f32.h"
+
+1636371813 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aiopti\aiopti_adam.c
+	"basic/base/aiopti/aiopti_adam.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633699805 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aiopti\aiopti_adam.h
+	"core/aifes_core.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aiopti\aiopti_sgd.c
+	"basic/base/aiopti/aiopti_sgd.h"
+	"basic/base/aimath/aimath_basic.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\base\aiopti\aiopti_sgd.h
+	"core/aifes_core.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\cmsis\ailayer\ailayer_dense_cmsis.c
+	"basic/default/ailayer/ailayer_dense_default.h"
+	"../../../aifes.h"
+	"basic/cmsis/ailayer/ailayer_dense_cmsis.h"
+	"basic/cmsis/aimath/aimath_f32_cmsis.h"
+
+1638864178 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\aifes.h
+	"core/aifes_math.h"
+	"core/aifes_core.h"
+	"basic/base/aimath/aimath_f32.h"
+	"basic/base/aimath/aimath_basic.h"
+	"basic/base/ailayer/ailayer_dense.h"
+	"basic/base/ailayer/ailayer_input.h"
+	"basic/base/ailayer/ailayer_relu.h"
+	"basic/base/ailayer/ailayer_leaky_relu.h"
+	"basic/base/ailayer/ailayer_elu.h"
+	"basic/base/ailayer/ailayer_sigmoid.h"
+	"basic/base/ailayer/ailayer_tanh.h"
+	"basic/base/ailayer/ailayer_softmax.h"
+	"basic/base/ailayer/ailayer_softsign.h"
+	"basic/base/ailoss/ailoss_mse.h"
+	"basic/base/ailoss/ailoss_crossentropy.h"
+	"basic/base/aiopti/aiopti_sgd.h"
+	"basic/base/aiopti/aiopti_adam.h"
+	"basic/default/aimath/aimath_f32_default.h"
+	"basic/default/ailayer/ailayer_dense_default.h"
+	"basic/default/ailayer/ailayer_input_default.h"
+	"basic/default/ailayer/ailayer_relu_default.h"
+	"basic/default/ailayer/ailayer_leaky_relu_default.h"
+	"basic/default/ailayer/ailayer_elu_default.h"
+	"basic/default/ailayer/ailayer_sigmoid_default.h"
+	"basic/default/ailayer/ailayer_tanh_default.h"
+	"basic/default/ailayer/ailayer_softmax_default.h"
+	"basic/default/ailayer/ailayer_softsign_default.h"
+	"basic/default/ailoss/ailoss_mse_default.h"
+	"basic/default/ailoss/ailoss_crossentropy_default.h"
+	"basic/default/aiopti/aiopti_sgd_default.h"
+	"basic/default/aiopti/aiopti_adam_default.h"
+	"basic/cmsis/aimath/aimath_f32_cmsis.h"
+	"basic/cmsis/ailayer/ailayer_dense_cmsis.h"
+	"basic/base/aialgo/aialgo_sequential_inference.h"
+	"basic/base/aialgo/aialgo_sequential_training.h"
+	"basic/base/aialgo/aialgo_sequential_training_meProp.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_input_default.h
+	"basic/base/ailayer/ailayer_input.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_relu_default.h
+	"basic/base/ailayer/ailayer_relu.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_leaky_relu_default.h
+	"basic/base/ailayer/ailayer_leaky_relu.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_elu_default.h
+	"basic/base/ailayer/ailayer_elu.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_sigmoid_default.h
+	"basic/base/ailayer/ailayer_sigmoid.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_tanh_default.h
+	"basic/base/ailayer/ailayer_tanh.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_softmax_default.h
+	"basic/base/ailayer/ailayer_softmax.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_softsign_default.h
+	"basic/base/ailayer/ailayer_softsign.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailoss\ailoss_mse_default.h
+	"basic/base/ailoss/ailoss_mse.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailoss\ailoss_crossentropy_default.h
+	"basic/base/ailoss/ailoss_crossentropy.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\aiopti\aiopti_sgd_default.h
+	"basic/base/aiopti/aiopti_sgd.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\aiopti\aiopti_adam_default.h
+	"basic/base/aiopti/aiopti_adam.h"
+	"basic/default/aimath/aimath_f32_default.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\cmsis\aimath\aimath_f32_cmsis.h
+	"basic/base/aimath/aimath_f32.h"
+	"../../../aifes.h"
+
+1633347693 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\cmsis\ailayer\ailayer_dense_cmsis.h
+	"../../../aifes.h"
+	"basic/base/ailayer/ailayer_dense.h"
+	"basic/cmsis/aimath/aimath_f32_cmsis.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\cmsis\aimath\aimath_f32_cmsis.c
+	"basic/cmsis/aimath/aimath_f32_cmsis.h"
+	"../../../aifes.h"
+	"arm_math.h"
+
+1634537116 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_dense_default.c
+	"basic/default/ailayer/ailayer_dense_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_elu_default.c
+	"basic/default/ailayer/ailayer_elu_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_input_default.c
+	"basic/default/ailayer/ailayer_input_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_leaky_relu_default.c
+	"basic/default/ailayer/ailayer_leaky_relu_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_relu_default.c
+	"basic/default/ailayer/ailayer_relu_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_sigmoid_default.c
+	"basic/default/ailayer/ailayer_sigmoid_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_softmax_default.c
+	"basic/default/ailayer/ailayer_softmax_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_softsign_default.c
+	"basic/default/ailayer/ailayer_softsign_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailayer\ailayer_tanh_default.c
+	"basic/default/ailayer/ailayer_tanh_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailoss\ailoss_crossentropy_default.c
+	"basic/default/ailoss/ailoss_crossentropy_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\ailoss\ailoss_mse_default.c
+	"basic/default/ailoss/ailoss_mse_default.h"
+
+1641831370 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\aimath\aimath_f32_default.c
+	"basic/default/aimath/aimath_f32_default.h"
+	<float.h>
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\aiopti\aiopti_adam_default.c
+	"basic/default/aiopti/aiopti_adam_default.h"
+
+1633347693 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\basic\default\aiopti\aiopti_sgd_default.c
+	"basic/default/aiopti/aiopti_sgd_default.h"
+
+1641916415 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\research\main.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"aifes.h"
+	<time.h>
+	"MNIST_training_data.h"
+	"MNIST_test_data.h"
+
+1635146661 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_training_data.h
+
+1634723178 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_training_data_label.h
+
+1635146667 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_test_data.h
+
+1634723180 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_test_data_label.h
+
+1634127134 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\core\benchmark.h
+	<time.h>
+
+1634204966 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\core\timer.c
+	"core/timer.h"
+	"core/aifes_math.h"
+	<time.h>
+	<windows.h>
+
+1634135818 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\src\core\timer.h
+
+1635150268 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_test_data.c
+
+1634633290 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_test_data.c
+
+1634632860 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_test_data_label.c
+
+1634632840 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_training_data_label.c
+
+1635150267 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_training_data.c
+
+1634633332 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_training_data.c
+
+1634633357 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_training_data_label.c
+
+1634633298 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_test_data_label.c
+
+1634629413 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_test_data.h
+
+1633423787 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_test_data_label.h
+
+1633423784 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_training_data.h
+
+1633423784 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist_training_data_label.h
+
+1634637185 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\research\pch.h
+	"MNIST_training_data.h"
+	"MNIST_training_data_label.h"
+	"MNIST_test_data.h"
+	"MNIST_test_data_label.h"
+
+1634637185 c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\research\pch.h
+	"MNIST_training_data.h"
+	"MNIST_training_data_label.h"
+	"MNIST_test_data.h"
+	"MNIST_test_data_label.h"
+
+1635148855 source:c:\users\dmaie\hahn_schickard\aifes\aifes_codeblocks\examples\2_mnist_on_pc\dataset\mnist.c
+
