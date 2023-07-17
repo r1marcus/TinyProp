@@ -1,3 +1,7 @@
+''' 
+Author: Hahn-Schickard-Gesellschaft für angewandte Forschung e.V., Daniel Maier
+'''
+
 import numpy as np
 
 x = np.load("Anomaly_detection_slider_x.npy")

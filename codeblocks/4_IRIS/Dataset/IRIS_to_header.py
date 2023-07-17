@@ -1,3 +1,7 @@
+''' 
+Author: Hahn-Schickard-Gesellschaft für angewandte Forschung e.V., Daniel Maier
+'''
+
 import numpy
 from sklearn import datasets
 from tensorflow.keras.utils import to_categorical
