@@ -163,7 +163,7 @@ class SparseConv2d(torch.autograd.Function):
         for i in range(indices.size(1)):                
             grad_output[indices[0, i], indices[1, i]] = values[i]
         # undo the flattening
-        grad_output = grad_output.view(-1, out_ch, out_width, out_height)
+        grad_output = grad_output.view(-1, out_ch, out_width, out_height).to(weight.device)
   
 
         # proceed with layer specific computations
@@ -220,7 +220,7 @@ class TinyPropConv2d(TinyPropLayer, nn.Conv2d):
 
 #========== TRAINING ==========#
 
-def trainOneEpoch(model, optimizer, loss_function, train_loader, epoch, print_interval=10):
+def trainOneEpoch(device, model, optimizer, loss_function, train_loader, epoch, print_interval=10):
     model.train()   # set the model to train mode
     batch_idx = 0
     running_loss = 0
@@ -228,6 +228,8 @@ def trainOneEpoch(model, optimizer, loss_function, train_loader, epoch, print_in
 
     # loop over batches
     for batch_idx, (data, target) in enumerate(train_loader):
+        data = data.to(device)
+        target = target.to(device)
         optimizer.zero_grad()
         output = model(data)
         loss = loss_function(output, target)
@@ -254,7 +256,7 @@ def trainOneEpoch(model, optimizer, loss_function, train_loader, epoch, print_in
     return running_loss/batch_idx, 100*running_accuracy/len(train_loader.dataset)
 
 
-def evaluate(model, loss_function, test_loader):
+def evaluate(device, model, loss_function, test_loader):
     model.eval()  # set the model to evaluation mode
     batch_idx = 0
     running_loss = 0
@@ -262,6 +264,8 @@ def evaluate(model, loss_function, test_loader):
 
     with torch.no_grad():
         for batch_idx, (data, target) in enumerate(test_loader):  #loop through batches
+            data = data.to(device)
+            target = target.to(device)
             output = model(data)
             running_loss += loss_function(output, target).item()
             idx_predicted = torch.max(output.data, 1)[1]    # get index of predicted class (max value)
