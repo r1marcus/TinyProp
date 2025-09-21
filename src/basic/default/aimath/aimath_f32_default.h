@@ -1309,5 +1309,33 @@ void getAbsTopKIndices(uint16_t* topK, const uint16_t k, const aitensor_t* tenso
  */
 void getAbsTopKIndices_minHeap(uint16_t* topK, const uint16_t k, const aitensor_t* tensor, uint16_t row);
 
+void aimath_f32_default_conv1d_forward(const aitensor_t *input, const aitensor_t *weights, const aitensor_t *bias,
+                                       uint16_t stride, uint16_t padding, uint16_t dilation, uint16_t groups,
+                                       aitensor_t *output);
+void aimath_f32_default_conv1d_input_grad(const aitensor_t *delta_out, const aitensor_t *weights,
+                                          uint16_t stride, uint16_t padding, uint16_t dilation, uint16_t groups,
+                                          aitensor_t *delta_in);
+void aimath_f32_default_conv1d_weight_grad(const aitensor_t *delta_out, const aitensor_t *input,
+                                           uint16_t stride, uint16_t padding, uint16_t dilation, uint16_t groups,
+                                           aitensor_t *d_weights);
+
+void aimath_f32_default_conv2d_forward(const aitensor_t *input, const aitensor_t *weights, const aitensor_t *bias,
+                                       uint16_t stride_height, uint16_t stride_width,
+                                       uint16_t padding_height, uint16_t padding_width,
+                                       uint16_t dilation_height, uint16_t dilation_width,
+                                       uint16_t groups, aitensor_t *output);
+void aimath_f32_default_conv2d_input_grad(const aitensor_t *delta_out, const aitensor_t *weights,
+                                          uint16_t stride_height, uint16_t stride_width,
+                                          uint16_t padding_height, uint16_t padding_width,
+                                          uint16_t dilation_height, uint16_t dilation_width,
+                                          uint16_t groups, aitensor_t *delta_in);
+void aimath_f32_default_conv2d_weight_grad(const aitensor_t *delta_out, const aitensor_t *input,
+                                           uint16_t stride_height, uint16_t stride_width,
+                                           uint16_t padding_height, uint16_t padding_width,
+                                           uint16_t dilation_height, uint16_t dilation_width,
+                                           uint16_t groups, aitensor_t *d_weights);
+
+void aimath_f32_default_conv_bias_grad(const aitensor_t *delta_out, aitensor_t *d_bias);
+
 #endif // AIMATH_F32_DEFAULT
 

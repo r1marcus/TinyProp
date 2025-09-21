@@ -24,6 +24,7 @@
 
 #include "basic/default/aimath/aimath_f32_default.h"
 #include <float.h>
+#include <string.h>
 
 
 void aimath_f32_default_linear(const aitensor_t *a, const aitensor_t *b, const aitensor_t *c, aitensor_t *result)
@@ -662,19 +663,421 @@ void aimath_f32_default_init_glorot_uniform(aitensor_t *tensor)
  */
 void aimath_f32_default_init_he_uniform(aitensor_t *tensor)
 {
-	float fan_in, fan_avg;
-	if(tensor->dim == 2)
-	{
-		fan_in = tensor->shape[0];
-	}
-	else if(tensor->dim == 4)
-	{
-		fan_in = tensor->shape[1] * tensor->shape[2] * tensor->shape[3]; // In channel * kernel_elems
-	}
+        float fan_in, fan_avg;
+        if(tensor->dim == 2)
+        {
+                fan_in = tensor->shape[0];
+        }
+        else if(tensor->dim == 4)
+        {
+                fan_in = tensor->shape[1] * tensor->shape[2] * tensor->shape[3]; // In channel * kernel_elems
+        }
 
-	fan_avg = fan_in  / 2.0f;
-	float r = sqrt(3.0f / fan_avg);
-	aimath_f32_default_tensor_init_uniform(tensor, -r, r);
+        fan_avg = fan_in  / 2.0f;
+        float r = sqrt(3.0f / fan_avg);
+        aimath_f32_default_tensor_init_uniform(tensor, -r, r);
+}
+
+void aimath_f32_default_conv_bias_grad(const aitensor_t *delta_out, aitensor_t *d_bias)
+{
+        float *grad_data = (float *) d_bias->data;
+        const float *delta_data = (const float *) delta_out->data;
+
+        uint16_t batch = delta_out->shape[0];
+        uint16_t channels = delta_out->shape[1];
+        uint32_t spatial = 1;
+        uint8_t dim;
+        for(dim = 2; dim < delta_out->dim; dim++)
+        {
+                spatial *= delta_out->shape[dim];
+        }
+
+        uint32_t channel_stride = spatial;
+        uint32_t batch_stride = channels * spatial;
+
+        for(uint16_t oc = 0; oc < channels; oc++)
+        {
+                float sum = 0.0f;
+                for(uint16_t n = 0; n < batch; n++)
+                {
+                        uint32_t base = n * batch_stride + oc * channel_stride;
+                        for(uint32_t idx = 0; idx < spatial; idx++)
+                        {
+                                sum += delta_data[base + idx];
+                        }
+                }
+                grad_data[oc] += sum;
+        }
+}
+
+void aimath_f32_default_conv1d_forward(const aitensor_t *input, const aitensor_t *weights, const aitensor_t *bias,
+                                       uint16_t stride, uint16_t padding, uint16_t dilation, uint16_t groups,
+                                       aitensor_t *output)
+{
+        const float *input_data = (const float *) input->data;
+        const float *weight_data = (const float *) weights->data;
+        const float *bias_data = (bias != 0 && bias->data != 0) ? (const float *) bias->data : 0;
+        float *out_data = (float *) output->data;
+
+        uint16_t batch = input->shape[0];
+        uint16_t in_channels = input->shape[1];
+        uint16_t in_length = input->shape[2];
+        uint16_t out_channels = weights->shape[0];
+        uint16_t kernel = weights->shape[2];
+        uint16_t out_length = output->shape[2];
+        uint16_t channels_per_group = in_channels / groups;
+        uint16_t out_per_group = out_channels / groups;
+
+#ifdef SHAPE_CHECK
+        if(output->shape[1] != out_channels)
+        {
+                LOG_E("Conv1D forward: output channels mismatch.\n");
+                return;
+        }
+        if(channels_per_group * groups != in_channels)
+        {
+                LOG_E("Conv1D forward: invalid group configuration.\n");
+                return;
+        }
+        if(out_per_group * groups != out_channels)
+        {
+                LOG_E("Conv1D forward: invalid output group configuration.\n");
+                return;
+        }
+#endif
+
+        for(uint16_t n = 0; n < batch; n++)
+        {
+                for(uint16_t g = 0; g < groups; g++)
+                {
+                        for(uint16_t oc = 0; oc < out_per_group; oc++)
+                        {
+                                uint16_t oc_global = g * out_per_group + oc;
+                                for(uint16_t out_pos = 0; out_pos < out_length; out_pos++)
+                                {
+                                        float sum = bias_data ? bias_data[oc_global] : 0.0f;
+                                        for(uint16_t ic = 0; ic < channels_per_group; ic++)
+                                        {
+                                                uint16_t ic_global = g * channels_per_group + ic;
+                                                for(uint16_t k = 0; k < kernel; k++)
+                                                {
+                                                        int32_t in_pos = (int32_t) out_pos * stride - (int32_t) padding + (int32_t) k * dilation;
+                                                        if(in_pos < 0 || in_pos >= in_length)
+                                                        {
+                                                                continue;
+                                                        }
+
+                                                        uint32_t input_index = ((uint32_t) n * in_channels + ic_global) * in_length + (uint32_t) in_pos;
+                                                        uint32_t weight_index = ((uint32_t) oc_global * channels_per_group + ic) * kernel + k;
+                                                        sum += input_data[input_index] * weight_data[weight_index];
+                                                }
+                                        }
+                                        uint32_t out_index = ((uint32_t) n * out_channels + oc_global) * out_length + out_pos;
+                                        out_data[out_index] = sum;
+                                }
+                        }
+                }
+        }
+}
+
+void aimath_f32_default_conv1d_input_grad(const aitensor_t *delta_out, const aitensor_t *weights,
+                                          uint16_t stride, uint16_t padding, uint16_t dilation, uint16_t groups,
+                                          aitensor_t *delta_in)
+{
+        float *grad_input = (float *) delta_in->data;
+        const float *delta_data = (const float *) delta_out->data;
+        const float *weight_data = (const float *) weights->data;
+
+        memset(grad_input, 0, aimath_sizeof_tensor_data(delta_in));
+
+        uint16_t batch = delta_out->shape[0];
+        uint16_t out_channels = delta_out->shape[1];
+        uint16_t out_length = delta_out->shape[2];
+        uint16_t in_channels = delta_in->shape[1];
+        uint16_t in_length = delta_in->shape[2];
+        uint16_t kernel = weights->shape[2];
+        uint16_t channels_per_group = in_channels / groups;
+        uint16_t out_per_group = out_channels / groups;
+
+        for(uint16_t n = 0; n < batch; n++)
+        {
+                for(uint16_t g = 0; g < groups; g++)
+                {
+                        for(uint16_t oc = 0; oc < out_per_group; oc++)
+                        {
+                                uint16_t oc_global = g * out_per_group + oc;
+                                for(uint16_t out_pos = 0; out_pos < out_length; out_pos++)
+                                {
+                                        float grad = delta_data[((uint32_t) n * out_channels + oc_global) * out_length + out_pos];
+                                        for(uint16_t ic = 0; ic < channels_per_group; ic++)
+                                        {
+                                                uint16_t ic_global = g * channels_per_group + ic;
+                                                for(uint16_t k = 0; k < kernel; k++)
+                                                {
+                                                        int32_t in_pos = (int32_t) out_pos * stride - (int32_t) padding + (int32_t) k * dilation;
+                                                        if(in_pos < 0 || in_pos >= in_length)
+                                                        {
+                                                                continue;
+                                                        }
+
+                                                        uint32_t input_index = ((uint32_t) n * in_channels + ic_global) * in_length + (uint32_t) in_pos;
+                                                        uint32_t weight_index = ((uint32_t) oc_global * channels_per_group + ic) * kernel + k;
+                                                        grad_input[input_index] += grad * weight_data[weight_index];
+                                                }
+                                        }
+                                }
+                        }
+                }
+        }
+}
+
+void aimath_f32_default_conv1d_weight_grad(const aitensor_t *delta_out, const aitensor_t *input,
+                                           uint16_t stride, uint16_t padding, uint16_t dilation, uint16_t groups,
+                                           aitensor_t *d_weights)
+{
+        const float *delta_data = (const float *) delta_out->data;
+        const float *input_data = (const float *) input->data;
+        float *grad_data = (float *) d_weights->data;
+
+        uint16_t batch = input->shape[0];
+        uint16_t in_channels = input->shape[1];
+        uint16_t in_length = input->shape[2];
+        uint16_t out_channels = delta_out->shape[1];
+        uint16_t out_length = delta_out->shape[2];
+        uint16_t kernel = d_weights->shape[2];
+        uint16_t channels_per_group = in_channels / groups;
+        uint16_t out_per_group = out_channels / groups;
+
+        for(uint16_t g = 0; g < groups; g++)
+        {
+                for(uint16_t oc = 0; oc < out_per_group; oc++)
+                {
+                        uint16_t oc_global = g * out_per_group + oc;
+                        for(uint16_t ic = 0; ic < channels_per_group; ic++)
+                        {
+                                uint16_t ic_global = g * channels_per_group + ic;
+                                for(uint16_t k = 0; k < kernel; k++)
+                                {
+                                        uint32_t weight_index = ((uint32_t) oc_global * channels_per_group + ic) * kernel + k;
+                                        for(uint16_t n = 0; n < batch; n++)
+                                        {
+                                                for(uint16_t out_pos = 0; out_pos < out_length; out_pos++)
+                                                {
+                                                        int32_t in_pos = (int32_t) out_pos * stride - (int32_t) padding + (int32_t) k * dilation;
+                                                        if(in_pos < 0 || in_pos >= in_length)
+                                                        {
+                                                                continue;
+                                                        }
+
+                                                        uint32_t input_index = ((uint32_t) n * in_channels + ic_global) * in_length + (uint32_t) in_pos;
+                                                        uint32_t delta_index = ((uint32_t) n * out_channels + oc_global) * out_length + out_pos;
+                                                        grad_data[weight_index] += input_data[input_index] * delta_data[delta_index];
+                                                }
+                                        }
+                                }
+                        }
+                }
+        }
+}
+
+void aimath_f32_default_conv2d_forward(const aitensor_t *input, const aitensor_t *weights, const aitensor_t *bias,
+                                       uint16_t stride_height, uint16_t stride_width,
+                                       uint16_t padding_height, uint16_t padding_width,
+                                       uint16_t dilation_height, uint16_t dilation_width,
+                                       uint16_t groups, aitensor_t *output)
+{
+        const float *input_data = (const float *) input->data;
+        const float *weight_data = (const float *) weights->data;
+        const float *bias_data = (bias != 0 && bias->data != 0) ? (const float *) bias->data : 0;
+        float *out_data = (float *) output->data;
+
+        uint16_t batch = input->shape[0];
+        uint16_t in_channels = input->shape[1];
+        uint16_t in_height = input->shape[2];
+        uint16_t in_width = input->shape[3];
+        uint16_t out_channels = weights->shape[0];
+        uint16_t kernel_h = weights->shape[2];
+        uint16_t kernel_w = weights->shape[3];
+        uint16_t out_height = output->shape[2];
+        uint16_t out_width = output->shape[3];
+        uint16_t channels_per_group = in_channels / groups;
+        uint16_t out_per_group = out_channels / groups;
+
+        for(uint16_t n = 0; n < batch; n++)
+        {
+                for(uint16_t g = 0; g < groups; g++)
+                {
+                        for(uint16_t oc = 0; oc < out_per_group; oc++)
+                        {
+                                uint16_t oc_global = g * out_per_group + oc;
+                                for(uint16_t oh = 0; oh < out_height; oh++)
+                                {
+                                        for(uint16_t ow = 0; ow < out_width; ow++)
+                                        {
+                                                float sum = bias_data ? bias_data[oc_global] : 0.0f;
+                                                for(uint16_t ic = 0; ic < channels_per_group; ic++)
+                                                {
+                                                        uint16_t ic_global = g * channels_per_group + ic;
+                                                        for(uint16_t kh = 0; kh < kernel_h; kh++)
+                                                        {
+                                                                int32_t ih = (int32_t) oh * stride_height - (int32_t) padding_height + (int32_t) kh * dilation_height;
+                                                                if(ih < 0 || ih >= in_height)
+                                                                {
+                                                                        continue;
+                                                                }
+                                                                for(uint16_t kw = 0; kw < kernel_w; kw++)
+                                                                {
+                                                                        int32_t iw = (int32_t) ow * stride_width - (int32_t) padding_width + (int32_t) kw * dilation_width;
+                                                                        if(iw < 0 || iw >= in_width)
+                                                                        {
+                                                                                continue;
+                                                                        }
+
+                                                                        uint32_t input_index = (((uint32_t) n * in_channels + ic_global) * in_height + (uint32_t) ih) * in_width + (uint32_t) iw;
+                                                                        uint32_t weight_index = ((((uint32_t) oc_global * channels_per_group + ic) * kernel_h) + kh) * kernel_w + kw;
+                                                                        sum += input_data[input_index] * weight_data[weight_index];
+                                                                }
+                                                        }
+                                                }
+                                                uint32_t out_index = (((uint32_t) n * out_channels + oc_global) * out_height + oh) * out_width + ow;
+                                                out_data[out_index] = sum;
+                                        }
+                                }
+                        }
+                }
+        }
+}
+
+void aimath_f32_default_conv2d_input_grad(const aitensor_t *delta_out, const aitensor_t *weights,
+                                          uint16_t stride_height, uint16_t stride_width,
+                                          uint16_t padding_height, uint16_t padding_width,
+                                          uint16_t dilation_height, uint16_t dilation_width,
+                                          uint16_t groups, aitensor_t *delta_in)
+{
+        float *grad_input = (float *) delta_in->data;
+        const float *delta_data = (const float *) delta_out->data;
+        const float *weight_data = (const float *) weights->data;
+
+        memset(grad_input, 0, aimath_sizeof_tensor_data(delta_in));
+
+        uint16_t batch = delta_out->shape[0];
+        uint16_t out_channels = delta_out->shape[1];
+        uint16_t out_height = delta_out->shape[2];
+        uint16_t out_width = delta_out->shape[3];
+        uint16_t in_channels = delta_in->shape[1];
+        uint16_t in_height = delta_in->shape[2];
+        uint16_t in_width = delta_in->shape[3];
+        uint16_t kernel_h = weights->shape[2];
+        uint16_t kernel_w = weights->shape[3];
+        uint16_t channels_per_group = in_channels / groups;
+        uint16_t out_per_group = out_channels / groups;
+
+        for(uint16_t n = 0; n < batch; n++)
+        {
+                for(uint16_t g = 0; g < groups; g++)
+                {
+                        for(uint16_t oc = 0; oc < out_per_group; oc++)
+                        {
+                                uint16_t oc_global = g * out_per_group + oc;
+                                for(uint16_t oh = 0; oh < out_height; oh++)
+                                {
+                                        for(uint16_t ow = 0; ow < out_width; ow++)
+                                        {
+                                                float grad = delta_data[(((uint32_t) n * out_channels + oc_global) * out_height + oh) * out_width + ow];
+                                                for(uint16_t ic = 0; ic < channels_per_group; ic++)
+                                                {
+                                                        uint16_t ic_global = g * channels_per_group + ic;
+                                                        for(uint16_t kh = 0; kh < kernel_h; kh++)
+                                                        {
+                                                                int32_t ih = (int32_t) oh * stride_height - (int32_t) padding_height + (int32_t) kh * dilation_height;
+                                                                if(ih < 0 || ih >= in_height)
+                                                                {
+                                                                        continue;
+                                                                }
+                                                                for(uint16_t kw = 0; kw < kernel_w; kw++)
+                                                                {
+                                                                        int32_t iw = (int32_t) ow * stride_width - (int32_t) padding_width + (int32_t) kw * dilation_width;
+                                                                        if(iw < 0 || iw >= in_width)
+                                                                        {
+                                                                                continue;
+                                                                        }
+
+                                                                        uint32_t input_index = (((uint32_t) n * in_channels + ic_global) * in_height + (uint32_t) ih) * in_width + (uint32_t) iw;
+                                                                        uint32_t weight_index = ((((uint32_t) oc_global * channels_per_group + ic) * kernel_h) + kh) * kernel_w + kw;
+                                                                        grad_input[input_index] += grad * weight_data[weight_index];
+                                                                }
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+                }
+        }
+}
+
+void aimath_f32_default_conv2d_weight_grad(const aitensor_t *delta_out, const aitensor_t *input,
+                                           uint16_t stride_height, uint16_t stride_width,
+                                           uint16_t padding_height, uint16_t padding_width,
+                                           uint16_t dilation_height, uint16_t dilation_width,
+                                           uint16_t groups, aitensor_t *d_weights)
+{
+        const float *delta_data = (const float *) delta_out->data;
+        const float *input_data = (const float *) input->data;
+        float *grad_data = (float *) d_weights->data;
+
+        uint16_t batch = input->shape[0];
+        uint16_t in_channels = input->shape[1];
+        uint16_t in_height = input->shape[2];
+        uint16_t in_width = input->shape[3];
+        uint16_t out_channels = delta_out->shape[1];
+        uint16_t out_height = delta_out->shape[2];
+        uint16_t out_width = delta_out->shape[3];
+        uint16_t kernel_h = d_weights->shape[2];
+        uint16_t kernel_w = d_weights->shape[3];
+        uint16_t channels_per_group = in_channels / groups;
+        uint16_t out_per_group = out_channels / groups;
+
+        for(uint16_t g = 0; g < groups; g++)
+        {
+                for(uint16_t oc = 0; oc < out_per_group; oc++)
+                {
+                        uint16_t oc_global = g * out_per_group + oc;
+                        for(uint16_t ic = 0; ic < channels_per_group; ic++)
+                        {
+                                uint16_t ic_global = g * channels_per_group + ic;
+                                for(uint16_t kh = 0; kh < kernel_h; kh++)
+                                {
+                                        for(uint16_t kw = 0; kw < kernel_w; kw++)
+                                        {
+                                                uint32_t weight_index = ((((uint32_t) oc_global * channels_per_group + ic) * kernel_h) + kh) * kernel_w + kw;
+                                                for(uint16_t n = 0; n < batch; n++)
+                                                {
+                                                        for(uint16_t oh = 0; oh < out_height; oh++)
+                                                        {
+                                                                int32_t ih = (int32_t) oh * stride_height - (int32_t) padding_height + (int32_t) kh * dilation_height;
+                                                                if(ih < 0 || ih >= in_height)
+                                                                {
+                                                                        continue;
+                                                                }
+                                                                for(uint16_t ow = 0; ow < out_width; ow++)
+                                                                {
+                                                                        int32_t iw = (int32_t) ow * stride_width - (int32_t) padding_width + (int32_t) kw * dilation_width;
+                                                                        if(iw < 0 || iw >= in_width)
+                                                                        {
+                                                                                continue;
+                                                                        }
+
+                                                                        uint32_t input_index = (((uint32_t) n * in_channels + ic_global) * in_height + (uint32_t) ih) * in_width + (uint32_t) iw;
+                                                                        uint32_t delta_index = (((uint32_t) n * out_channels + oc_global) * out_height + oh) * out_width + ow;
+                                                                        grad_data[weight_index] += input_data[input_index] * delta_data[delta_index];
+                                                                }
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+                }
+        }
 }
 
 //Info(?): http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.9.4508&rep=rep1&type=pdf
