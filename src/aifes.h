@@ -43,6 +43,8 @@ extern "C" {
 
 // Include the layer base implementations
 #include "basic/base/ailayer/ailayer_dense.h"
+#include "basic/base/ailayer/ailayer_conv1d.h"
+#include "basic/base/ailayer/ailayer_conv2d.h"
 #include "basic/base/ailayer/ailayer_input.h"
 #include "basic/base/ailayer/ailayer_relu.h"
 #include "basic/base/ailayer/ailayer_leaky_relu.h"
@@ -68,6 +70,8 @@ extern "C" {
 
 // Include the layers in default implementation
 #include "basic/default/ailayer/ailayer_dense_default.h"
+#include "basic/default/ailayer/ailayer_conv1d_default.h"
+#include "basic/default/ailayer/ailayer_conv2d_default.h"
 #include "basic/default/ailayer/ailayer_input_default.h"
 #include "basic/default/ailayer/ailayer_relu_default.h"
 #include "basic/default/ailayer/ailayer_leaky_relu_default.h"
